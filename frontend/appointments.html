@@ -10,41 +10,20 @@
     <div class="container">
         <h1>Foothills Hospital Appointment System</h1>
         
-        <div class="section1">
-            <label for="viewinfo">Veiw Info:</label>
-            <input type="text" id="info">
-            <button onclick="showDoctors()">View Patient Info</button>
-        </div>
 
         <div id="section1">
-            <input type="text" id="userInput" placeholder="Type your message here..." onkeypress="handleKeyPress(event)" />
-            <button id="sendButton" onclick="showDoctors()">&#8594;</button>
+            <input type="text" id="userInput1" placeholder="Enter Patiend ID here" onkeypress="handleKeyPress(event)" />
+            <button id="sendButton1" onclick="checkPatient()">&#8594;</button>
+        </div>
+        
+
+        <div id="section2">
+            <input type="text" id="userInput2" placeholder="Enter specialty here" onkeypress="handleKeyPress(event)" />
+            <button id="sendButton2" onclick="searchAvailableDoctors()">&#8594;</button>
         </div>
 
-        <div class="section2">
-            <label for="specialty">Specialty:</label>
-            <input type="text" id="specialty">
-            <button onclick="showDoctors()">Search Doctors</button>
-        </div>
-        
-        <div class="section">
-            <h2>Available Doctors</h2>
-            <ul id="doctors_list"></ul>
-        </div>
-        
-        <div class="section">
-            <button onclick="showTimeSlots()">Show Time Slots</button>
-        </div>
-        
-        <div class="section">
-            <h2>Available Time Slots</h2>
-            <ul id="time_slots_list"></ul>
-        </div>
-        
-        <div class="section">
-            <button onclick="bookAppointment()">Book Appointment</button>
-        </div>
+
     </div>
-    <script src="scripts.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

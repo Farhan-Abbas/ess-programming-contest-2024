@@ -1,20 +1,31 @@
 async function checkPatient() {
-    const patientId = document.getElementById('patient_id').value;
-    if (patientId) {
-        const backendEndpoint = "http://127.0.0.1:5000/api/viewPatientInfo";
+    var input = document.getElementById("userInput1").value;
+    if (input) {
+        const backendEndpoint = "http://127.0.0.1:5000/api/viewPatientApp";
         try {
             const response = await fetch(backendEndpoint, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ message: message }),
+                body: JSON.stringify({ message: input }),
             });
             const text = await response.text();
             const data = JSON.parse(text);
             if (response.ok) {
                 console.log(data["message"]);
                 console.log("Message received successfully!");
+
+                var section1 = document.getElementById('section1');
+
+                var userMessageContainer = document.createElement("p");
+                userMessageContainer.innerText = data['message'][0][0];
+                section1.appendChild(userMessageContainer)
+
+                var userMessageContainer = document.createElement("p");
+                userMessageContainer.innerText = data['message'][1][0];
+                section1.appendChild(userMessageContainer)
+
             } else {
                 console.error("Error receiving message!.");
             }
@@ -24,35 +35,45 @@ async function checkPatient() {
     } else {
         alert("Please enter a patient ID or click 'New Patient' to register.");
     }
-
-    var input = document.getElementById("userInput");
-
-
 }
 
-function showAppointments() {
-    const patientId = document.getElementById('patient_id').value;
-    fetch(`${API_URL}/viewPatientInfo`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ patient_id: patientId }),
-    })
-        .then(response => response.json())
-        .then(data => {
-            const appointmentsList = document.getElementById('appointments_list');
-            appointmentsList.innerHTML = '';
-            data.message.forEach(appt => {
-                const li = document.createElement('li');
-                li.textContent = JSON.stringify(appt);
-                appointmentsList.appendChild(li);
+async function searchAvailableDoctors() {
+    var input = document.getElementById("userInput2").value;
+    if (input) {
+        const backendEndpoint = "http://127.0.0.1:5000/api/searchAvailableDoctors";
+        try {
+            const response = await fetch(backendEndpoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ message: input }),
             });
-        })
-        .catch(error => {
-            alert("Failed to fetch appointments");
-            console.error('Error:', error);
-        });
+            const text = await response.text();
+            const data = JSON.parse(text);
+            if (response.ok) {
+                console.log(data["message"]);
+                console.log("Message received successfully!");
+
+                var section2 = document.getElementById('section2');
+
+                var userMessageContainer = document.createElement("p");
+                userMessageContainer.innerText = data['message'][0];
+                section2.appendChild(userMessageContainer)
+
+                var userMessageContainer = document.createElement("p");
+                userMessageContainer.innerText = data['message'][1];
+                section2.appendChild(userMessageContainer)
+
+            } else {
+                console.error("Error receiving message!.");
+            }
+        } catch (error) {
+            console.error("Error sending data!", error);
+        }
+    } else {
+        alert("Please enter a patient ID or click 'New Patient' to register.");
+    }
 }
 
 function showDoctors() {
