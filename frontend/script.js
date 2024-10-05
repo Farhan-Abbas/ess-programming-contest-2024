@@ -1,13 +1,33 @@
-const API_URL = "http://127.0.0.1:8000";
-
-function checkPatient() {
+async function checkPatient() {
     const patientId = document.getElementById('patient_id').value;
     if (patientId) {
-        // Redirect to appointments page with patient ID
-        window.location.href = `appointments.html?patient_id=${patientId}`;
+        const backendEndpoint = "http://127.0.0.1:5000/api/viewPatientInfo";
+        try {
+            const response = await fetch(backendEndpoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ message: message }),
+            });
+            const text = await response.text();
+            const data = JSON.parse(text);
+            if (response.ok) {
+                console.log(data["message"]);
+                console.log("Message received successfully!");
+            } else {
+                console.error("Error receiving message!.");
+            }
+        } catch (error) {
+            console.error("Error sending data!", error);
+        }
     } else {
         alert("Please enter a patient ID or click 'New Patient' to register.");
     }
+
+    var input = document.getElementById("userInput");
+
+
 }
 
 function showAppointments() {
