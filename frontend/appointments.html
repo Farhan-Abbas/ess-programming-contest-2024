@@ -12,7 +12,7 @@
         
 
         <div id="section1">
-            <input type="text" id="userInput1" placeholder="Enter Patiend ID here" onkeypress="handleKeyPress(event)" />
+            <input type="text" id="userInput1" placeholder="Enter Patient ID here" onkeypress="handleKeyPress(event)" />
             <button id="sendButton1" onclick="checkPatient()">&#8594;</button>
         </div>
         
@@ -20,6 +20,12 @@
         <div id="section2">
             <input type="text" id="userInput2" placeholder="Enter specialty here" onkeypress="handleKeyPress(event)" />
             <button id="sendButton2" onclick="searchAvailableDoctors()">&#8594;</button>
+        </div>
+        
+
+        <div id="section3">
+            <input type="text" id="userInput3" placeholder="Enter Doctor ID here" onkeypress="handleKeyPress(event)" />
+            <button id="sendButton3" onclick="showTimeSlotForSelectedDoctor()">&#8594;</button>
         </div>
 
 

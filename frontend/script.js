@@ -76,103 +76,45 @@ async function searchAvailableDoctors() {
     }
 }
 
-function showDoctors() {
-    const specialty = document.getElementById('specialty').value;
-    fetch(`${API_URL}/showTimeSlot`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ specialty: specialty }),
-    })
-        .then(response => response.json())
-        .then(data => {
-            const doctorsList = document.getElementById('doctors_list');
-            doctorsList.innerHTML = '';
-            data.message.forEach(doc => {
-                const li = document.createElement('li');
-                li.textContent = doc;
-                li.onclick = () => selectDoctor(doc);
-                doctorsList.appendChild(li);
+async function showTimeSlotForSelectedDoctor() {
+    var input = document.getElementById("userInput3").value;
+    if (input) {
+        const backendEndpoint = "http://127.0.0.1:5000/api/showTimeSlotForSelectedDoctor";
+        try {
+            const response = await fetch(backendEndpoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ message: input }),
             });
-        })
-        .catch(error => {
-            alert("Failed to fetch doctors");
-            console.error('Error:', error);
-        });
-}
+            const text = await response.text();
+            const data = JSON.parse(text);
+            if (response.ok) {
+                console.log(data["message"]);
+                console.log("Message received successfully!");
 
-let selectedDoctor = null;
+                var section3 = document.getElementById('section3');
 
-function selectDoctor(doctor) {
-    selectedDoctor = doctor;
-    alert(`Selected Doctor: ${doctor}`);
-}
+                var userMessageContainer = document.createElement("p");
+                userMessageContainer.innerText = 'Time slots available for the doctor with id: ' + input;
+                section3.appendChild(userMessageContainer)
+                
+                var userMessageContainer = document.createElement("p");
+                userMessageContainer.innerText = data['message'][0];
+                section3.appendChild(userMessageContainer)
 
-function showTimeSlots() {
-    if (!selectedDoctor) {
-        alert("Please select a doctor");
-        return;
-    }
-    fetch(`${API_URL}/bookTimeSlot`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ doctor_id: selectedDoctor }),
-    })
-        .then(response => response.json())
-        .then(data => {
-            const timeSlotsList = document.getElementById('time_slots_list');
-            timeSlotsList.innerHTML = '';
-            data.message.forEach(slot => {
-                const li = document.createElement('li');
-                li.textContent = slot;
-                li.onclick = () => selectTimeSlot(slot);
-                timeSlotsList.appendChild(li);
-            });
-        })
-        .catch(error => {
-            alert("Failed to fetch time slots");
-            console.error('Error:', error);
-        });
-}
-
-let selectedTimeSlot = null;
-
-function selectTimeSlot(slot) {
-    selectedTimeSlot = slot;
-    alert(`Selected Time Slot: ${slot}`);
-}
-
-function bookAppointment() {
-    const patientId = document.getElementById('patient_id').value;
-    if (!selectedDoctor || !selectedTimeSlot) {
-        alert("Please select a doctor and a time slot");
-        return;
-    }
-    const timeHour = parseInt(selectedTimeSlot.split(' ')[0]);
-    fetch(`${API_URL}/bookTimeSlot`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            patient_id: patientId,
-            doctor_id: selectedDoctor,
-            time_hour: timeHour
-        }),
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-                alert("Appointment booked successfully");
+                var userMessageContainer = document.createElement("p");
+                userMessageContainer.innerText = data['message'][1];
+                section3.appendChild(userMessageContainer)
             } else {
-                alert("Appointment conflict");
+                console.error("Error receiving message!.");
             }
-        })
-        .catch(error => {
-            alert("Failed to book appointment");
-            console.error('Error:', error);
-        });
+        } catch (error) {
+            console.error("Error sending data!", error);
+        }
+    } else {
+        alert("Please enter a patient ID or click 'New Patient' to register.");
+    }
 }
+

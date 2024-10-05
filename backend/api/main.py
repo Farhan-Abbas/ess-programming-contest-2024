@@ -42,26 +42,26 @@ def searchAvailableDoctors():
     print(availableDoctor)
     return {'message': availableDoctor}
     
-# @app.route('/api/showTimeSlotForSelectedDoctor', methods=['POST'])
-# def showTimeSlotForSelectedDoctor():
-#     data = request.get_json()
-#     doctorId = input()
-#     cursor.execute(f"SELECT * FROM doctor WHERE doctor.doctor_id = '{doctorId}';")
-#     result = cursor.fetchall()
-#     print(result)
-#     availableTime = []
-#     temp = result[0][-1]
-#     print(temp)
-#     for i in range(len(temp)):
-#         if temp[i] == True:
-#             if 8 + i <= 10:
-#                 availableTime.append(f'{8 + i}am - {9 + i}am')
-#             elif 8 + i == 11:
-#                 availableTime.append(f'{8 + i}am - {9 + i}pm')
-#             else:
-#                 availableTime.append(f'{8 + i}pm - {9 + i}pm')
-#     print(availableTime)
-#     return {'message': availableTime}
+@app.route('/api/showTimeSlotForSelectedDoctor', methods=['POST'])
+def showTimeSlotForSelectedDoctor():
+    data = request.get_json()
+    doctorId = data['message']
+    cursor.execute(f"SELECT * FROM doctor WHERE doctor.doctor_id = '{doctorId}';")
+    result = cursor.fetchall()
+    print(result)
+    availableTime = []
+    temp = result[0][-1]
+    print(temp)
+    for i in range(len(temp)):
+        if temp[i] == True:
+            if 8 + i <= 10:
+                availableTime.append(f'{8 + i}am - {9 + i}am')
+            elif 8 + i == 11:
+                availableTime.append(f'{8 + i}am - {9 + i}pm')
+            else:
+                availableTime.append(f'{8 + i}pm - {9 + i}pm')
+    print(availableTime)
+    return {'message': availableTime}
 
 
 # @app.route('/api/bookTimeSlot', methods=['POST'])
