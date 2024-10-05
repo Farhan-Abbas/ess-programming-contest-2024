@@ -4,30 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Foothills Hospital Appointment System</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1>Foothills Hospital Appointment System</h1>
         
-
+        <h2>Search Patient Appointments and Information:</h2>
         <div id="section1">
             <input type="text" id="userInput1" placeholder="Enter Patient ID here" onkeypress="handleKeyPress(event)" />
             <button id="sendButton1" onclick="checkPatient()">&#8594;</button>
         </div>
         
-
+        <h2>Search time slot for doctors based on their specialty</h2>
         <div id="section2">
             <input type="text" id="userInput2" placeholder="Enter specialty here" onkeypress="handleKeyPress(event)" />
             <button id="sendButton2" onclick="searchAvailableDoctors()">&#8594;</button>
         </div>
         
-
+        <h2>Show all available time slots for doctor</h2>
         <div id="section3">
             <input type="text" id="userInput3" placeholder="Enter Doctor ID here" onkeypress="handleKeyPress(event)" />
             <button id="sendButton3" onclick="showTimeSlotForSelectedDoctor()">&#8594;</button>
         </div>
-
+        
+        <h2>Book Time Slots</h2>
+        <div id="section4">
+            <input type="text" id="userInput4" placeholder="Enter Patient ID, Doctor ID and Hour in format: {patiendID},{doctorID, hour} " onkeypress="handleKeyPress(event)" />
+            <button id="sendButton4" onclick="bookTimeSlot()">&#8594;</button>
+        </div>
 
     </div>
     <script src="script.js"></script>

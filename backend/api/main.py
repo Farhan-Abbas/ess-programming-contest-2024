@@ -64,32 +64,32 @@ def showTimeSlotForSelectedDoctor():
     return {'message': availableTime}
 
 
-# @app.route('/api/bookTimeSlot', methods=['POST'])
-# def bookTimeSlot():
-#     data = request.get_json()
-#     patID = input()
-#     docID = input()
-#     timeHour = int(input())
-#     cursor.execute(f"SELECT * FROM doctor WHERE doctor.doctor_id = '{docID}';")
-#     result = cursor.fetchall()
-#     if result[-1][-1][timeHour - 8] == True:
-#         cursor.execute(f"UPDATE doctor SET available[{timeHour - 8 + 1}] = '{False}' WHERE doctor_id = '{docID}';")
-#         print("success!")
-#         cursor.execute(f"SELECT * FROM doctor WHERE doctor.doctor_id = '{docID}';")
-#         print(cursor.fetchall())
-#         dateToday = datetime.today().strftime('%Y-%m-%d')
-#         if timeHour < 10:
-#             timeHour = '0' + str(timeHour)
-#         else:
-#             timeHour = str(timeHour)
-#         cursor.execute(f"SELECT * FROM appointments;")
-#         appointmentTableLen = len(cursor.fetchall())
-#         cursor.execute(f"INSERT INTO appointments (appointment_id, patient_id, doctor_id, date, start_time, end_time) VALUES ('{appointmentTableLen + 1}', '{patID}', '{docID}', '{dateToday}', '{dateToday + ' ' + timeHour + ':00:00'}', '{dateToday + ' ' + str(int(timeHour) + 1) + ':00:00'}');")
-#         print('success!')
-#         return {'message': True}
-#     else:
-#         print("failure!")
-#         return {'message': False}
+@app.route('/api/bookTimeSlot', methods=['POST'])
+def bookTimeSlot():
+    print('hi')
+    data = request.get_json()
+    patID = data['message'][0]
+    docID = data['message'][1]
+    timeHour = int(data['message'][2])
+    cursor.execute(f"SELECT * FROM doctor WHERE doctor.doctor_id = '{docID}';")
+    result = cursor.fetchall()
+    if result[-1][-1][timeHour - 8] == True:
+        cursor.execute(f"UPDATE doctor SET available[{timeHour - 8 + 1}] = '{False}' WHERE doctor_id = '{docID}';")
+        cursor.execute(f"SELECT * FROM doctor WHERE doctor.doctor_id = '{docID}';")
+        print(cursor.fetchall())
+        dateToday = datetime.today().strftime('%Y-%m-%d')
+        if timeHour < 10:
+            timeHour = '0' + str(timeHour)
+        else:
+            timeHour = str(timeHour)
+        cursor.execute(f"SELECT * FROM appointments;")
+        appointmentTableLen = len(cursor.fetchall())
+        cursor.execute(f"INSERT INTO appointments (appointment_id, patient_id, doctor_id, date, start_time, end_time) VALUES ('{appointmentTableLen + 1}', '{patID}', '{docID}', '{dateToday}', '{dateToday + ' ' + timeHour + ':00:00'}', '{dateToday + ' ' + str(int(timeHour) + 1) + ':00:00'}');")
+        print('success!')
+        return {'message': True}
+    else:
+        print("failure!")
+        return {'message': False}
 
 
 if __name__ == '__main__':

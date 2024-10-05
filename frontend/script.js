@@ -1,4 +1,5 @@
 async function checkPatient() {
+    
     var input = document.getElementById("userInput1").value;
     if (input) {
         const backendEndpoint = "http://127.0.0.1:5000/api/viewPatientApp";
@@ -19,11 +20,19 @@ async function checkPatient() {
                 var section1 = document.getElementById('section1');
 
                 var userMessageContainer = document.createElement("p");
-                userMessageContainer.innerText = data['message'][0][0];
+                userMessageContainer.innerText = 'Patient Information';
                 section1.appendChild(userMessageContainer)
 
                 var userMessageContainer = document.createElement("p");
                 userMessageContainer.innerText = data['message'][1][0];
+                section1.appendChild(userMessageContainer)
+
+                var userMessageContainer = document.createElement("p");
+                userMessageContainer.innerText = "Patient's Appointment Information";
+                section1.appendChild(userMessageContainer)
+
+                var userMessageContainer = document.createElement("p");
+                userMessageContainer.innerText = data['message'][0][0];
                 section1.appendChild(userMessageContainer)
 
             } else {
@@ -56,6 +65,9 @@ async function searchAvailableDoctors() {
                 console.log("Message received successfully!");
 
                 var section2 = document.getElementById('section2');
+                var userMessageContainer = document.createElement("p");
+                userMessageContainer.innerText = 'Available doctors based on speciality: ' + input;
+                section2.append(userMessageContainer)
 
                 var userMessageContainer = document.createElement("p");
                 userMessageContainer.innerText = data['message'][0];
@@ -107,6 +119,45 @@ async function showTimeSlotForSelectedDoctor() {
                 var userMessageContainer = document.createElement("p");
                 userMessageContainer.innerText = data['message'][1];
                 section3.appendChild(userMessageContainer)
+            } else {
+                console.error("Error receiving message!.");
+            }
+        } catch (error) {
+            console.error("Error sending data!", error);
+        }
+    } else {
+        alert("Please enter a patient ID or click 'New Patient' to register.");
+    }
+}
+
+async function bookTimeSlot() {
+    var input = document.getElementById("userInput4").value;
+    var arraySplit = input.split(',');
+    patientID = arraySplit[0];
+    doctorID = arraySplit[1];
+    hour = arraySplit[2];
+
+    if (input) {
+        const backendEndpoint = "http://127.0.0.1:5000/api/bookTimeSlot";
+        try {
+            const response = await fetch(backendEndpoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ message: [patientID, doctorID, hour] }),
+            });
+            const text = await response.text();
+            const data = JSON.parse(text);
+            if (response.ok) {
+                console.log(data["message"]);
+                console.log("Message received successfully!");
+
+                var section4 = document.getElementById('section4');
+
+                var userMessageContainer = document.createElement("p");
+                userMessageContainer.innerText = 'Booking Status: ' + data['message'];
+                section4.appendChild(userMessageContainer)
             } else {
                 console.error("Error receiving message!.");
             }
