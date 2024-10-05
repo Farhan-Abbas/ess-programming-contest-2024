@@ -30,16 +30,6 @@ def create_app(config=None):
     # https://flask-cors.readthedocs.io/en/latest/
     CORS(app)
 
-    # Definition of the routes. Put them into their own file. See also
-    # Flask Blueprints: http://flask.pocoo.org/docs/latest/blueprints
-    @app.route("/")
-    def hello_world():
-        return "Hello World"
-
-    @app.route("/foo/<someId>")
-    def foo_url_arg(someId):
-        return jsonify({"echo": someId})
-
     @app.route('/appointments/<int:patient_id>', methods=['GET'])
     def get_appointments(patient_id):
         conn = connect_db()
@@ -93,6 +83,31 @@ def create_app(config=None):
         conn.commit()
         conn.close()
         return jsonify({"success": True, "message": "Appointment booked successfully"}), 201
+
+    @app.route('/patients', methods=['POST'])
+    def add_patient():
+        data = request.json
+        name = data['name']
+        contact = data['contact']
+        
+        conn = connect_db()
+        cur = conn.cursor()
+        
+        # Get the current number of patients
+        query = sql.SQL("SELECT COUNT(*) FROM Patients")
+        cur.execute(query)
+        patient_count = cur.fetchone()[0]
+        
+        # Generate new patient ID
+        new_patient_id = patient_count + 1
+        
+        # Insert new patient into the database
+        query = sql.SQL("INSERT INTO Patients (patient_id, name, contact) VALUES (%s, %s, %s)")
+        cur.execute(query, (new_patient_id, name, contact))
+        conn.commit()
+        conn.close()
+        
+        return jsonify({"success": True, "message": "Patient added successfully", "patient_id": new_patient_id}), 201
 
     return app
 

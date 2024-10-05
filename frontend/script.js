@@ -1,7 +1,18 @@
-const API_URL = "http://127.0.0.1:5000";
+const API_URL = "http://127.0.0.1:8000";
+
+function checkPatient() {
+    const patientId = document.getElementById('patient_id').value;
+    if (patientId) {
+        // Redirect to appointments page with patient ID
+        window.location.href = `appointments.html?patient_id=${patientId}`;
+    } else {
+        alert("Please enter a patient ID or click 'New Patient' to register.");
+    }
+}
 
 function showAppointments() {
-    const patientId = document.getElementById('patient_id').value;
+    const urlParams = new URLSearchParams(window.location.search);
+    const patientId = urlParams.get('patient_id');
     fetch(`${API_URL}/appointments/${patientId}`)
         .then(response => response.json())
         .then(data => {
@@ -77,7 +88,8 @@ function selectTimeSlot(slot) {
 }
 
 function bookAppointment() {
-    const patientId = document.getElementById('patient_id').value;
+    const urlParams = new URLSearchParams(window.location.search);
+    const patientId = urlParams.get('patient_id');
     if (!selectedDoctor || !selectedTimeSlot) {
         alert("Please select a doctor and a time slot");
         return;
@@ -107,6 +119,35 @@ function bookAppointment() {
         })
         .catch(error => {
             alert("Failed to book appointment");
+            console.error('Error:', error);
+        });
+}
+
+function addPatient() {
+    const name = document.getElementById('new_patient_name').value;
+    const contact = document.getElementById('new_patient_contact').value;
+    fetch(`${API_URL}/patients`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: name,
+            contact: contact
+        }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(`Patient added successfully with ID: ${data.patient_id}`);
+                // Redirect back to the main page with the new patient ID
+                window.location.href = `index.html?patient_id=${data.patient_id}`;
+            } else {
+                alert("Failed to add patient");
+            }
+        })
+        .catch(error => {
+            alert("Failed to add patient");
             console.error('Error:', error);
         });
 }
